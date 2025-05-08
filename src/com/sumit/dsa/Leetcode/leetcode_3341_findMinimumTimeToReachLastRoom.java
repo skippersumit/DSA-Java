@@ -6,11 +6,13 @@ class XY{
     int time;
     int x;
     int y;
+    boolean isOdd;
 
-    public XY(int time, int x, int y) {
+    public XY(int time, int x, int y, boolean isOdd) {
         this.time = time;
         this.x = x;
         this.y = y;
+        this.isOdd = isOdd;
     }
 }
 
@@ -23,7 +25,7 @@ public class leetcode_3341_findMinimumTimeToReachLastRoom {
         int[][] vis = new int[rows][cols];
         for (int i=0;i<rows;i++) Arrays.fill(vis[i],Integer.MAX_VALUE);
 
-        minHeap.add(new XY(0,0,0));
+        minHeap.add(new XY(0,0,0,true));
         vis[0][0] = 0;
 
         int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -41,11 +43,11 @@ public class leetcode_3341_findMinimumTimeToReachLastRoom {
 
                 if(newx >= 0 && newx < rows && newy >=0 && newy < cols ){
                     int waitTime = Math.max(moveTime[newx][newy] - currentTime, 0 );
-                    int newTime = currentTime + 1 + waitTime;
+                    int newTime = currentTime + waitTime + (cur.isOdd ? 1 : 2);
 
                     if(newTime < vis[newx][newy]){
                         vis[newx][newy] = newTime;
-                        minHeap.add(new XY(newTime,newx,newy));
+                        minHeap.add(new XY(newTime,newx,newy,!cur.isOdd));
                     }
                 }
             }
@@ -56,7 +58,10 @@ public class leetcode_3341_findMinimumTimeToReachLastRoom {
         int[][] moveTime = new int[][]{{0,4},{4,4}};
         System.out.println("Ans 1 = "+ minTimeToReach(moveTime));
 
-        int[][] moveTime2 = new int[][]{{0,0,0},{0,0,0}};
+        int[][] moveTime2 = new int[][]{{0,0,0,0},{0,0,0,0}};
         System.out.println("Ans 2 = "+ minTimeToReach(moveTime2));
+
+        int[][] moveTime3 = new int[][]{{0,1},{1,2}};
+        System.out.println("Ans 3 = "+ minTimeToReach(moveTime3));
     }
 }
