@@ -15,30 +15,28 @@ public class maxSumOfNonAdjacentElements {
 //        return max(pick,notPick)
 //     }
 
-    private static int maximumNonAdjacentElements(int ind, int[] nums)
-    {
+    private static int maximumNonAdjacentElements(int ind, int[] nums) {
         // Recursion
-        if(ind == 0) return nums[0];
-        if(ind < 0) return  0;
+        if (ind == 0) return nums[0];
+        if (ind < 0) return 0;
 
-        int pick = nums[ind] + maximumNonAdjacentElements(ind-2, nums);
-        int notPick = 0 + maximumNonAdjacentElements(ind-1, nums);
-        return Math.max(pick,notPick);
+        int pick = nums[ind] + maximumNonAdjacentElements(ind - 2, nums);
+        int notPick = maximumNonAdjacentElements(ind - 1, nums);
+        return Math.max(pick, notPick);
     }
 
-    private static int maximumNonAdjacentElementsDp(int ind, int[] nums, int[] dp)
-    {
+    private static int maximumNonAdjacentElementsDp(int ind, int[] nums, int[] dp) {
         // DP approach
-        if(ind == 0) return nums[0];
-        if(ind < 0) return  0;
-        if(dp[ind] != -1) return dp[ind];
+        if (ind == 0) return nums[0];
+        if (ind < 0) return 0;
+        if (dp[ind] != -1) return dp[ind];
 
-        int pick = nums[ind] + maximumNonAdjacentElementsDp(ind-2, nums,dp);
-        int notPick = 0 + maximumNonAdjacentElementsDp(ind-1, nums,dp);
-        return dp[ind] = Math.max(pick,notPick);
+        int pick = nums[ind] + maximumNonAdjacentElementsDp(ind - 2, nums, dp);
+        int notPick = maximumNonAdjacentElementsDp(ind - 1, nums, dp);
+        return dp[ind] = Math.max(pick, notPick);
     }
 
-    private static int maximumNonAdjacentElementsDpTabulation(int[] nums) {
+    public static int maximumNonAdjacentElementsDpTabulation(int[] nums) {
         /*
         Tabulation is bottom up
         * int[] dp = new int[n] -> 0 declare it as 0
@@ -59,32 +57,33 @@ public class maxSumOfNonAdjacentElements {
         * */
 
         /*
-        * Tabulation + space Optimization
-        * for dp[i] we just need dp[i-2] and dp[i-1]
-        * Just require two spaces
-        * fun() {
-        *   int prev2 = 0;
-        *   prev = arr[0]
-        *   for(int i=1;i<n;i++)
-        *       {
-        *       take = arr[ind] + prev2;
-        *       notTake = 0 + prev;
-        *       curi = max(take,notTake)
-        *       prev2 = prev;
-        *       prev = curi;
-        *       }
-        *   return prev <-  last value will be at prev
-        *   }
-        * TC - O(n)
-        * SC - O(1)
-        * */
+         * Tabulation + space Optimization
+         * for dp[i] we just need dp[i-2] and dp[i-1]
+         * Just require two spaces
+         * fun() {
+         *   int prev2 = 0;
+         *   prev = arr[0]
+         *   for(int i=1;i<n;i++)
+         *       {
+         *       take = arr[ind] + prev2;
+         *       notTake = 0 + prev;
+         *       curi = max(take,notTake)
+         *       prev2 = prev;
+         *       prev = curi;
+         *       }
+         *   return prev <-  last value will be at prev
+         *   }
+         * TC - O(n)
+         * SC - O(1)
+         * */
         int n = nums.length;
         int prev = nums[0];
         int prev2 = 0;
-        for(int i=1;i<n;i++) {
-            int take = nums[i]; if(i>1) take += prev2;
-            int notTake = 0 + prev;
-            int curi = Math.max(take,notTake);
+        for (int i = 1; i < n; i++) {
+            int take = nums[i];
+            if (i > 1) take += prev2;
+            int notTake = prev;
+            int curi = Math.max(take, notTake);
 
             prev2 = prev;
             prev = curi;
@@ -93,13 +92,13 @@ public class maxSumOfNonAdjacentElements {
     }
 
     public static void main(String[] args) {
-        int[] arr = {2,1,4,9};
+        int[] arr = {2, 1, 4, 9};
         int n = arr.length;
-        System.out.println("Ans is " + maximumNonAdjacentElements(n-1,arr));
+        System.out.println("Ans is " + maximumNonAdjacentElements(n - 1, arr));
 
         int[] dp = new int[n];
-        Arrays.fill(dp,-1);
-        System.out.println("Ans is DP = " + maximumNonAdjacentElementsDp(n-1,arr, dp));
+        Arrays.fill(dp, -1);
+        System.out.println("Ans is DP = " + maximumNonAdjacentElementsDp(n - 1, arr, dp));
 
         System.out.println("Ans is DP with tabulation = " + maximumNonAdjacentElementsDpTabulation(arr));
     }
